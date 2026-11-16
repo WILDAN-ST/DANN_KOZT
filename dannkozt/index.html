@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DANNKOZT</title><link rel="stylesheet" href="style.css"></head><body>
+<nav id="nav"></nav>
+<!-- PENYEWA / UMUM -->
+<section class="page" id="v-beranda"><div class="hero"><h1>Temukan Kost Impianmu, Booking Lebih Mudah Bersama DANNKOZT.</h1><form class="hs" onsubmit="event.preventDefault();go('kamar');$('q').value=$('hq').value;$('q').dispatchEvent(new Event('input'))"><input id="hq" type="search" placeholder="🔍 Cari lokasi kost (kota)..."><button class="btn">Cari Kost</button></form><a class="btn alt" onclick="go('register')">Daftarkan Kost Anda</a></div><div class="wrap"><h2>Rekomendasi Kost</h2><div class="grid" id="rek"></div></div><div class="wrap"><h2>Mengapa DANNKOZT?</h2><div class="grid"><div class="sec"><h3>✅ Terverifikasi</h3><p class="d">Pemilik dan kost diperiksa admin sebelum tayang.</p></div><div class="sec"><h3>💰 Harga Fleksibel</h3><p class="d">Pilih sewa bulanan, semester, atau tahunan.</p></div><div class="sec"><h3>⚡ Booking Mudah</h3><p class="d">Pilih, hitung total otomatis, lalu booking.</p></div></div></div></section>
+<section class="page" id="v-kamar"><div class="wrap"><h2>Cari Kost</h2><div class="filters">
+<input id="q" placeholder="Lokasi"><input id="max" type="number" placeholder="Harga maks/bulan"><select id="tp"><option value="">Semua tipe kost</option><option>Putra</option><option>Putri</option><option>Campur</option></select>
+<select id="sw"><option value="">Semua tipe sewa</option><option value="bulan">Bulanan</option><option value="semester">Semester</option><option value="tahun">Tahunan</option></select><label><input id="av" type="checkbox"> Tersedia saja</label></div><div class="grid" id="list"></div></div></section>
+<section class="page" id="v-detail"><div class="wrap" id="d"></div></section>
+<section class="page" id="v-login"><form class="form" onsubmit="doLogin(event)"><h2>Login</h2><input id="le" type="email" placeholder="Email" required><input id="lp" type="password" placeholder="Password" required><button class="btn">Login</button>
+<small>Demo: penyewa@dannkozt.id / 123456 · pemilik@dannkozt.id / 123456 · admin@dannkozt.id / admin123<br>Semua peran login di sini.</small></form></section>
+<section class="page" id="v-register"><form class="form" onsubmit="doReg(event)"><h2>Registrasi</h2>
+<select id="rr" onchange="$('ktpbox').classList.toggle('hide',this.value!=='pemilik')"><option value="penyewa">Saya Penyewa</option><option value="pemilik">Saya Pemilik Kost</option></select>
+<input id="rn" placeholder="Nama lengkap" required><input id="re" type="email" placeholder="Email" required><input id="rh" placeholder="Nomor HP" required><input id="rp" type="password" placeholder="Password (min 6)" required><input id="rc" type="password" placeholder="Konfirmasi password" required>
+<div id="ktpbox" class="hide"><input id="rk" placeholder="NIK (16 digit)"><label>Foto KTP (JPG/PNG) <input id="rf" type="file" accept=".jpg,.jpeg,.png"></label><small>Demo: berkas KTP tidak disimpan di localStorage. Produksi wajib memakai penyimpanan privat di backend.</small></div>
+<button class="btn">Daftar</button></form></section>
+<section class="page" id="v-riwayat"><div class="wrap"><h2>Riwayat Booking</h2><p><small>Pembayaran hanya simulasi, belum terhubung ke payment gateway.</small></p><div class="grid" id="rw"></div></div></section>
+<section class="page" id="v-profil"><div class="wrap" id="pf"></div></section>
+<!-- PEMILIK & ADMIN -->
+<section class="page" id="v-dashboard"><div class="wrap"><h2>Dashboard</h2><div class="stats" id="ds"></div></div></section>
+<section class="page" id="v-tambah"><form class="form" onsubmit="addKost(event)"><h2>Tambah Kost</h2>
+<fieldset class="sec two"><legend>Informasi Kost</legend><p class="d full">Masukkan informasi dasar mengenai properti kost Anda.</p>
+<input id="kn" class="full" placeholder="Nama kost" required><select id="kt"><option>Putra</option><option>Putri</option><option>Campur</option></select><input id="kj" type="number" min="1" placeholder="Jumlah kamar" required><input id="ka" type="number" min="0" placeholder="Kamar tersedia" required><input id="kf" placeholder="Fasilitas lain (pisahkan koma)"></fieldset>
+<fieldset class="sec two"><legend>Lokasi Kost</legend><p class="d full">Tentukan lokasi kost secara lengkap agar mudah ditemukan calon penyewa.</p>
+<div class="loc"><input type="search" placeholder="🔍 Cari provinsi" oninput="flt('pv',this.value)"><select id="pv" onchange="onPv()"><option value="">Pilih Provinsi</option></select></div>
+<div class="loc"><input type="search" id="fs2" placeholder="🔍 Cari kabupaten/kota" oninput="flt('kb',this.value)"><select id="kb" onchange="onKb()"><option value="">Pilih Kabupaten/Kota</option></select></div>
+<div class="loc"><input type="search" id="fs3" placeholder="🔍 Cari kecamatan" oninput="flt('kk',this.value)"><select id="kk"><option value="">Pilih Kecamatan</option></select></div>
+<textarea id="al" class="full" rows="3" placeholder="Alamat lengkap: nama jalan, nomor, kelurahan, RT/RW, kode pos, patokan lokasi"></textarea></fieldset>
+<fieldset class="sec"><legend>Foto &amp; Video Kost</legend><p class="d">Tambahkan minimal 5 foto atau video untuk menarik calon penyewa.</p><small>Upload minimal 5 foto atau video kost dengan ukuran maksimal 10 MB untuk setiap file.</small>
+<input id="mf" type="file" multiple accept=".jpg,.jpeg,.png,.webp,.mp4,.webm" onchange="pickFiles(this)"><b id="mc">0/5 file</b><div id="mp" class="pvs"></div></fieldset>
+<fieldset class="sec"><legend>Fasilitas Umum</legend><p class="d">Pilih fasilitas bersama yang tersedia di lingkungan kost.</p><div id="fu"></div><input id="jt" type="number" min="1" step="1" class="hide" placeholder="Total toilet (unit)"></fieldset>
+<fieldset class="sec"><legend>Iuran Kost</legend><p class="d">Atur informasi biaya tambahan WiFi, listrik, dan air.</p>
+<label>WiFi: <select id="iw" onchange="fi()"><option value="0">Tidak</option><option value="1">Iya</option></select></label><input id="hw" type="number" min="1" class="hide" placeholder="Iuran WiFi (Rp/bulan)">
+<label>Listrik: <select id="il" onchange="fi()"><option value="0">Tidak</option><option value="1">Iya</option></select></label>
+<div id="bl" class="hide sec"><select id="sl" onchange="fi()"><option value="termasuk">Listrik termasuk harga sewa</option><option value="bulanan">Iuran listrik bulanan</option><option value="token">Token listrik per kamar</option></select>
+<input id="ib" type="number" min="1" class="hide" placeholder="Total iuran listrik (Rp/bulan)"><div id="bt" class="hide"><small>Pembayaran token ditanggung masing-masing penghuni.</small><input id="tk" type="number" min="1" placeholder="Perkiraan token per kamar (Rp/bulan, opsional)"></div></div>
+<label>Air: <select id="ia" onchange="fi()"><option value="0">Tidak</option><option value="1">Iya</option></select></label><input id="ha" type="number" min="1" class="hide" placeholder="Iuran air (Rp/bulan)"></fieldset>
+<fieldset class="sec"><legend>Fasilitas Pribadi Kamar</legend><p class="d">Pilih fasilitas yang tersedia di dalam masing-masing kamar.</p><div id="fp"></div></fieldset>
+<fieldset class="sec"><legend>Harga dan Tipe Sewa</legend><p class="d">Atur harga sewa bulanan, semester, dan tahunan (centang untuk mengaktifkan).</p>
+<label><input type="checkbox" id="cb" checked> Bulan <input id="hb" type="number" min="1" placeholder="Harga/bulan"></label>
+<label><input type="checkbox" id="cs" checked> Semester <input id="hs" type="number" min="1" placeholder="Harga/semester"></label>
+<label><input type="checkbox" id="cy" checked> Tahun <input id="hy" type="number" min="1" placeholder="Harga/tahun"></label>
+</fieldset><button class="btn">Ajukan Kost</button></form></section>
+<section class="page" id="v-kelola"><div class="wrap"><h2>Kelola Kost</h2><div class="tbl" id="kl"></div></div></section>
+<section class="page" id="v-pesanan"><div class="wrap"><h2>Pesanan Masuk &amp; Riwayat Penyewaan</h2><div class="tbl" id="ps"></div></div></section>
+<section class="page" id="v-verif"><div class="wrap"><h2>Verifikasi Pemilik</h2><div class="tbl" id="vo"></div><h2>Verifikasi Kost</h2><div class="tbl" id="vk"></div></div></section>
+<section class="page" id="v-pengguna"><div class="wrap"><h2>Kelola Pengguna</h2><div class="tbl" id="pg"></div></div></section>
+<section class="page" id="v-transaksi"><div class="wrap"><h2>Kelola Transaksi</h2><div class="stats" id="trs"></div><div class="filters"><select id="trf" onchange="R.transaksi()"><option value="">Semua status</option><option>Menunggu Pembayaran</option><option>Sedang Diproses</option><option>Berhasil</option><option>Gagal</option><option>Kedaluwarsa</option></select></div><div class="tbl" id="tr"></div></div></section>
+<section class="page" id="v-checkout"><div class="wrap" id="co"></div></section>
+<section class="page" id="v-instruksi"><div class="wrap" id="ins"></div></section>
+<section class="page" id="v-riwayatbayar"><div class="wrap"><h2>Riwayat Pembayaran</h2><div class="tbl" id="rb"></div></div></section>
+<section class="page" id="v-detailtrx"><div class="wrap" id="dt"></div></section>
+<section class="page" id="v-trxpemilik"><div class="wrap"><h2>Transaksi Pembayaran</h2><div class="tbl" id="tp2"></div></div></section>
+<div id="lb" onclick="this.classList.remove('on')"></div>
+<script src="script.js"></script></body></html>
